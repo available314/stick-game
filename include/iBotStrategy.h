@@ -5,14 +5,14 @@
 #ifndef ISTRATEGY_H
 #define ISTRATEGY_H
 
-class iStrategy {
+class iBotStrategy {
 public:
 
-    iStrategy() = default;
+    iBotStrategy() = default;
 
     virtual void build() = 0;
 
-    virtual ~iStrategy() = default;
+    virtual ~iBotStrategy() = default;
 };
 
 

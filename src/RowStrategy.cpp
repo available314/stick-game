@@ -215,14 +215,25 @@ void RowStrategy::graph::calculate_data() noexcept {
 
 	for (auto node : topsort) {
 		for (auto nxt : node->next_nodes) {
-			nxt->win |= (!node->win);
+			if (!nxt->fall_state && !node->fall_state) {
+				nxt->fall_state = node;
+			}
 		}
 	}
+}
+
+bool RowStrategy::graph::is_win(int n) noexcept {
+	return static_cast<bool>(nodes[std::vector<std::pair<int, int>>(1, std::make_pair(n, 1))]);
 }
 
 RowStrategy::RowStrategy(int n, int k) : Graph(n, k) {
 
 }
+
+RowStrategy::RowStrategy(int n, int a, int b) : Graph(n, a, b) {
+
+}
+
 
 
 

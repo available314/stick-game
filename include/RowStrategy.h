@@ -11,9 +11,9 @@
 #include <unordered_set>
 #include <vector>
 
-#include "iStrategy.h"
+#include "iBotStrategy.h"
 
-class RowStrategy final : public iStrategy {
+class RowStrategy final : public iBotStrategy {
 
     struct graph {
         const int NUM_THREADS = 12;
@@ -24,8 +24,7 @@ class RowStrategy final : public iStrategy {
 
         struct Node {
             std::unordered_set<std::shared_ptr<Node>> next_nodes;
-
-            bool win = false;
+            std::shared_ptr<Node> fall_state;
 
             Node () = default;
         };
@@ -49,11 +48,13 @@ class RowStrategy final : public iStrategy {
         void build_graph() noexcept;
         void dfs(std::shared_ptr<Node> v, std::vector<std::shared_ptr<Node>> &topsort, std::unordered_map<std::shared_ptr<Node>, bool> &used) noexcept;
         void calculate_data() noexcept;
+        bool is_win(int n) noexcept;
     } Graph;
 
 public:
 
     explicit RowStrategy(int n, int k);
+    explicit RowStrategy(int n, int a, int b);
 
     void build() override;
 

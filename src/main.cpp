@@ -2,7 +2,8 @@
 #include <iostream>
 #include <memory>
 
-#include "solve.h"
+#include "Game.h"
+#include "RowMove.h"
 #include "RowStrategy.h"
 
 int main() {
@@ -13,9 +14,13 @@ int main() {
 
     auto start = std::chrono::steady_clock::now();
 
-    Solve solve;
+    Game solve;
     solve.setStrategy(std::make_unique<RowStrategy>(n, k));
+    solve.setMovesChecker(std::make_unique<RowMove>());
     solve.prepare();
+
+    // solve.create_move(vector<int> pos -> sticks we delete)
+    // need to create a strategy class for checking correctness of move
 
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
