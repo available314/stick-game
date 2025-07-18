@@ -1,0 +1,233 @@
+//
+// Created by pentester on 7/18/25.
+//
+
+
+#include "../include/RowStrategy.h"
+
+#include <algorithm>
+#include <numeric>
+#include <thread>
+
+std::vector<std::pair<int, int> > RowStrategy::graph::compress(const std::vector<int> &node_info) noexcept {
+    std::vector<std::pair<int, int>> node_info_compressed;
+
+    for (int i = 0; i < node_info.size(); i++) {
+        if (!node_info_compressed.size() || node_info_compressed.back().first != node_info[i]) {
+            node_info_compressed.emplace_back(node_info[i], 0);
+        }
+        node_info_compressed.back().second++;
+    }
+    return node_info_compressed;
+}
+
+void RowStrategy::graph::brute_nodes(int n, int k, std::vector<std::vector<std::pair<int, int>>> &result, int lst) noexcept {
+    static std::vector<int> current_groups;
+
+    if (k == 0) {
+        result.push_back(compress(current_groups));
+
+        return;
+    }
+
+    for (int i = lst; i <= n; i++) {
+        current_groups.push_back(i);
+        brute_nodes(n - i, k - 1, result, i);
+        current_groups.pop_back();
+    }
+}
+
+void RowStrategy::graph::prepare_nodes() noexcept {
+    nodes[std::vector<std::pair<int, int>>(0)] = std::make_shared<Node>(); // root node
+
+    for (int i = 1; i <= n_; i++) {
+        std::vector<std::vector<std::pair<int, int>>> result;
+        brute_nodes(n_ - i + 1, i, result);
+
+        for (auto pairs : result) {
+            nodes[pairs] = std::make_shared<Node>();
+        }
+    }
+}
+
+void RowStrategy::graph::build_graph() noexcept {
+    using vector_nodes = std::vector<std::pair<std::vector<std::pair<int, int>>, std::shared_ptr<Node>>>;
+
+    vector_nodes node_list(nodes.begin(), nodes.end());
+
+    auto worker = [a_ = this->a_, b_ = this->b_, n_ = this->n_, &nodes = this->nodes](size_t start, size_t end, const vector_nodes& local_nodes) {
+		for (size_t idx = start; idx < end; idx++) {
+			const auto& [node_info_compressed, node] = local_nodes[idx];
+			auto [sum, cnt] = std::accumulate(node_info_compressed.begin(), node_info_compressed.end(), std::make_pair(0, 0), [](std::pair<int, int> ac, std::pair<int, int> cur) {
+				return std::make_pair(ac.first + cur.first * cur.second, ac.second + cur.second);
+			});
+
+			for (int k = a_; k <= b_; k++) {
+				if (sum + k + cnt - 1 <= n_) {
+					for (int j = 0; j < node_info_compressed.size(); j++) {
+						auto cur = node_info_compressed;
+
+						if (!(--cur[j].second)) {
+							cur.erase(cur.begin() + j);
+						}
+
+						auto new_len = node_info_compressed[j].first + k;
+						bool merged = false;
+		                for (auto &pr : cur) {
+		                    if (pr.first == new_len) {
+		                        pr.second++;
+		                        merged = true;
+		                        break;
+		                    }
+		                }
+
+		                if (!merged) {
+			                auto it = std::upper_bound(
+		                        cur.begin(), cur.end(), new_len,
+		                        [](int v, const std::pair<int,int>& pr){
+		                            return v < pr.first;
+		                        }
+		                    );
+		                    cur.insert(it, {new_len, 1});
+
+		                }
+
+	                    auto it_node = nodes.find(cur);
+	                    auto prev = it_node->second;
+	                    node->next_nodes.insert(prev);
+					}
+				}
+
+				if (sum + k + cnt <= n_) {
+					auto next = node_info_compressed;
+
+	                bool merged = false;
+	                for (auto &pr : next) {
+	                    if (pr.first == k) {
+	                        pr.second++;
+	                        merged = true;
+	                        break;
+	                    }
+	                }
+	                if (!merged) {
+	                    auto it = std::upper_bound(
+	                        next.begin(), next.end(), k,
+	                        [](int v, const std::pair<int,int>& pr){
+	                            return v < pr.first;
+	                        }
+	                    );
+	                    next.insert(it, {k, 1});
+	                }
+	                auto it_node = nodes.find(next);
+                    auto prev = it_node->second;
+                    node->next_nodes.insert(prev);
+				}
+
+				if (sum + k + cnt - 2 <= n_ && cnt >= 2) {
+	                int M = node_info_compressed.size();
+	                for (int i = 0; i < M; ++i) {
+	                    for (int j = i; j < M; ++j) {
+	                        if (i == j && node_info_compressed[i].second < 2)
+	                            continue;
+
+	                        int len1 = node_info_compressed[i].first;
+	                        int len2 = node_info_compressed[j].first;
+	                        int merged_len = len1 + k + len2;
+
+	                        auto next = node_info_compressed;
+
+	                        if (i == j) {
+	                            next[i].second -= 2;
+	                            if (next[i].second == 0)
+	                                next.erase(next.begin() + i);
+	                        } else {
+	                            if (--next[j].second == 0)
+	                                next.erase(next.begin() + j);
+	                            if (--next[i].second == 0)
+	                                next.erase(next.begin() + i);
+	                        }
+
+	                        bool done = false;
+	                        for (auto &pr : next) {
+	                            if (pr.first == merged_len) {
+	                                pr.second++;
+	                                done = true;
+	                                break;
+	                            }
+	                        }
+	                        if (!done) {
+	                            auto it = std::upper_bound(
+	                                next.begin(), next.end(), merged_len,
+	                                [](int v, auto &pr){ return v < pr.first; }
+	                            );
+	                            next.insert(it, {merged_len,1});
+	                        }
+
+	                        auto it_node = nodes.find(next);
+	                        auto prev = it_node->second;
+		                    node->next_nodes.insert(prev);
+		                    //prev->prev_nodes.insert(node);
+	                    }
+	                }
+	            }
+			}
+		}
+	};
+
+	size_t total = node_list.size();
+	size_t chunk_size = (total + NUM_THREADS - 1) / NUM_THREADS;
+	std::vector<std::thread> threads;
+
+	for (int t = 0; t < NUM_THREADS; ++t) {
+		size_t start = t * chunk_size;
+		size_t end = std::min(start + chunk_size, total);
+		if (start >= end) break;
+		threads.emplace_back(worker, start, end, std::cref(node_list));
+	}
+
+	for (auto& th : threads) {
+	    th.join();
+	}
+}
+
+void RowStrategy::graph::dfs(std::shared_ptr<Node> v, std::vector<std::shared_ptr<Node>> &topsort, std::unordered_map<std::shared_ptr<Node>, bool> &used) noexcept {
+	used[v] = true;
+
+	for (auto u : v->next_nodes) {
+		if (used[u]) continue;
+		dfs(u, topsort, used);
+	}
+
+	topsort.push_back(v);
+}
+
+void RowStrategy::graph::calculate_data() noexcept {
+	std::unordered_map<std::shared_ptr<Node>, bool> used;
+	auto root = nodes[std::vector<std::pair<int, int>>(0)];
+	std::vector<std::shared_ptr<Node>> topsort;
+
+	for (auto [node_i, node] : nodes) {
+		if (!used[node]) {
+			dfs(node, topsort, used);
+		}
+	}
+	std::reverse(topsort.begin(), topsort.end());
+
+	for (auto node : topsort) {
+		for (auto nxt : node->next_nodes) {
+			nxt->win |= (!node->win);
+		}
+	}
+}
+
+RowStrategy::RowStrategy(int n, int k) : Graph(n, k) {
+
+}
+
+
+
+void RowStrategy::build() {
+	Graph.prepare_nodes();
+	Graph.build_graph();
+	Graph.calculate_data();
+}
