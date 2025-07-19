@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-bool RowMove::check_move(int k, const std::vector<bool> field, const std::vector<int> sticks) {
+bool RowMove::check_move(int k, const std::vector<bool> field, std::vector<int> sticks) {
     if (sticks.size() > k || sticks.size() < 1) {
         return false;
     }

@@ -8,12 +8,14 @@
 #include <memory>
 #include "iBotStrategy.h"
 #include "iCheckMove.h"
+#include "iState.h"
 
 class Game {
 
     std::unique_ptr<iBotStrategy> strategy;
     std::unique_ptr<iCheckMove> checkMove;
-    std::vector<bool> field;
+
+    std::unique_ptr<iState> state;
 
 public:
 
@@ -24,6 +26,7 @@ public:
 
     void prepare() noexcept;
 
+    void makeMove() noexcept;
 
     ~Game() = default;
 

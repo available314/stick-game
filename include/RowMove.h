@@ -14,6 +14,6 @@ class RowMove : public iCheckMove {
     bool check_move(int k, const std::vector<bool> field, const std::vector<int> sticks) override;
 
     ~RowMove() override = default;
-}
+};
 
 #endif //ROWMOVE_H
