@@ -10,23 +10,30 @@
 #include "iCheckMove.h"
 #include "iState.h"
 
-class Game {
+class iState;
+
+class Game : public std::enable_shared_from_this<Game> {
 
     std::unique_ptr<iBotStrategy> strategy;
     std::unique_ptr<iCheckMove> checkMove;
 
-    std::unique_ptr<iState> state;
+    std::shared_ptr<iState> current_turn;
+
+
+    std::pair<std::shared_ptr<iState>, std::shared_ptr<iState>> players;
 
 public:
 
-    Game() = default;
+    Game(std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player);
+
+
 
     void setStrategy(std::unique_ptr<iBotStrategy> strategy) noexcept;
     void setMovesChecker(std::unique_ptr<iCheckMove> checkMove) noexcept;
 
-    void prepare() noexcept;
+    void prepare() const noexcept;
 
-    void makeMove() noexcept;
+    void setTurn(std::shared_ptr<iState> turn) noexcept;
 
     ~Game() = default;
 

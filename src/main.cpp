@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Game.h"
+#include "human.h"
 #include "RowMove.h"
 #include "RowStrategy.h"
 
@@ -14,10 +15,10 @@ int main() {
 
     auto start = std::chrono::steady_clock::now();
 
-    Game solve;
-    solve.setStrategy(std::make_unique<RowStrategy>(n, k));
-    solve.setMovesChecker(std::make_unique<RowMove>());
-    solve.prepare();
+    auto solve = std::make_shared<Game>(std::make_shared<Human>(std::string{"first"}), std::make_shared<Human>(std::string{"second"}));
+    solve->setStrategy(std::make_unique<RowStrategy>(n, k));
+    solve->setMovesChecker(std::make_unique<RowMove>());
+    solve->prepare();
 
     // solve.create_move(vector<int> pos -> sticks we delete)
     // need to create a strategy class for checking correctness of move

@@ -15,12 +15,16 @@ protected:
 
     std::vector<bool> field;
 
-    std::shared_ptr<Game> game;
+    std::weak_ptr<Game> game;
+
+    std::weak_ptr<iState> nextPlayer;
 
 public:
     iState() = default;
 
+    void setGame(std::shared_ptr<Game> game_) noexcept;
     void setField(const std::vector<bool> &field);
+    void setNextPlayer(std::shared_ptr<iState> nextPlayer) noexcept;
 
     virtual void nextMove() = 0;
     virtual void prevMove() = 0;

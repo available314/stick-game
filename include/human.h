@@ -13,12 +13,11 @@
 class Human : public iState {
     const std::string name;
 
-    std::shared_ptr<iState> nextPlayer;
-
 public:
-    Human(const std::string &_name, const std::shared_ptr<iState> &nextPlayer_) : name(_name), nextPlayer(nextPlayer_) {}
+    explicit Human(const std::string &_name) : name(_name) {}
 
     void nextMove() noexcept override;
+    void prevMove() noexcept override;
 
     ~Human() override = default;
 };
