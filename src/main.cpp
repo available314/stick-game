@@ -27,5 +27,16 @@ int main() {
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
 
+    solve->Start();
+
+    solve->playTurn();
+    solve->nextTurn();
+    solve->playTurn();
+    solve->nextTurn();
+    solve->playTurn();
+    solve->nextTurn();
+    solve->playTurn();
+    solve->nextTurn();
+
     return 0;
 }

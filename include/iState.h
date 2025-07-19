@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 class Game;
 
@@ -26,8 +27,10 @@ public:
     void setField(const std::vector<bool> &field);
     void setNextPlayer(std::shared_ptr<iState> nextPlayer) noexcept;
 
+    virtual std::string getName() const = 0;
     virtual void nextMove() = 0;
     virtual void prevMove() = 0;
+    virtual void playTurn() = 0;
 
     virtual ~iState() = default;
 };

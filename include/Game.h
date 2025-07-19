@@ -26,7 +26,7 @@ public:
 
     Game(std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player);
 
-
+    void Start();
 
     void setStrategy(std::unique_ptr<iBotStrategy> strategy) noexcept;
     void setMovesChecker(std::unique_ptr<iCheckMove> checkMove) noexcept;
@@ -34,6 +34,10 @@ public:
     void prepare() const noexcept;
 
     void setTurn(std::shared_ptr<iState> turn) noexcept;
+
+    void playTurn() noexcept;
+    void nextTurn() noexcept;
+
 
     ~Game() = default;
 

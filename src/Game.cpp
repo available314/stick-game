@@ -4,11 +4,17 @@
 
 #include "Game.h"
 
+#include <iostream>
+
 Game::Game(std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player) {
     players.first = std::move(first_player);
     players.second = std::move(second_player);
     players.first->setNextPlayer(players.second);
     players.second->setNextPlayer(players.first);
+}
+
+void Game::Start() {
+    setTurn(players.first);
 }
 
 
@@ -28,4 +34,13 @@ void Game::prepare() const noexcept {
 void Game::setTurn(std::shared_ptr<iState> turn) noexcept {
     current_turn = turn;
     current_turn->setGame(shared_from_this());
+}
+
+
+void Game::playTurn() noexcept {
+    current_turn->playTurn();
+}
+
+void Game::nextTurn() noexcept {
+    current_turn->nextMove();
 }
