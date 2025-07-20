@@ -30,7 +30,7 @@ std::vector<int> Bot::playTurn() {
     auto strategy = cur_game->getStrategy();
 
 
-    auto cur_state = iState::get_state_by_field(field);
+    auto cur_state = strategy->get_state_by_field(field);
 
     auto next_win_state_opt = strategy->get_next_win_state(cur_state);
 

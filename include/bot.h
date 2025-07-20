@@ -5,9 +5,9 @@
 #ifndef BOT_H
 #define BOT_H
 
-#include "iState.h"
+#include "iPlayer.h"
 
-class Bot final : public iState {
+class Bot final : public iPlayer {
     const std::string name;
 
 

@@ -1,25 +1,12 @@
 //
-// Created by pentester on 7/19/25.
+// Created by pentester on 7/20/25.
 //
 
-
-#include "iState.h"
+#include "iBotStrategy.h"
 
 #include <map>
 
-void iState::setGame(std::shared_ptr<Game> game_) noexcept {
-    game = std::move(game_);
-}
-
-void iState::setField(std::vector<bool> *field_) {
-    field = field_;
-}
-
-void iState::setNextPlayer(const std::shared_ptr<iState> &nextPlayer_) noexcept {
-    nextPlayer = nextPlayer_;
-}
-
-std::vector<std::pair<int, int>> iState::get_state_by_field(const std::vector<bool> *state) noexcept {
+std::vector<std::pair<int, int>> iBotStrategy::get_state_by_field(const std::vector<bool> *state) noexcept {
     std::map<int, int> len_cnt;
 
     int cur_len = 0;

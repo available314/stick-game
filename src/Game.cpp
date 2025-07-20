@@ -6,7 +6,10 @@
 
 #include <iostream>
 
-Game::Game(int n, int k, std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player) : _n(n), _k(k), field(n, true) {
+Game::Game(int n, int k, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player) : Game(n, 1, k, first_player, second_player) {
+}
+
+Game::Game(int n, int a, int b, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player) : _n(n), _a(a), _b(b), field(n, true) {
     players.first = std::move(first_player);
     players.second = std::move(second_player);
     players.first->setNextPlayer(players.second);
@@ -49,7 +52,7 @@ void Game::prepare() const noexcept {
     strategy->build();
 }
 
-void Game::setTurn(std::shared_ptr<iState> turn) noexcept {
+void Game::setTurn(std::shared_ptr<iPlayer> turn) noexcept {
     current_turn = turn;
     current_turn->setGame(shared_from_this());
 }
@@ -59,7 +62,7 @@ void Game::playTurn() noexcept {
     while (true) {
         auto moves = current_turn->playTurn();
 
-        if (checkMove->check_move(_n, _k, field, moves)) {
+        if (checkMove->check_move(_n, _a, _b, field, moves)) {
             for (const auto i : moves) {
                 field[i] = false;
             }

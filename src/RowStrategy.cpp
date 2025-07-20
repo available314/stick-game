@@ -7,10 +7,11 @@
 
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <numeric>
 #include <thread>
 
-#include "iState.h"
+#include "iPlayer.h"
 
 std::vector<std::pair<int, int> > RowStrategy::graph::compress(const std::vector<int> &node_info) noexcept {
     std::vector<std::pair<int, int>> node_info_compressed;
@@ -281,7 +282,7 @@ std::optional<std::vector<int>> RowStrategy::make_transition(const std::vector<b
 			cur_from[i - need_to_delete] = from[i - need_to_delete];
 		}
 		cur_from[i] = false;
-		if (iState::get_state_by_field(&cur_from) == to) {
+		if (get_state_by_field(&cur_from) == to) {
 			std::vector<int> result(need_to_delete);
 			iota(result.begin(), result.end(), i - need_to_delete + 1);
 			return result;
@@ -294,5 +295,5 @@ std::optional<std::vector<int>> RowStrategy::make_transition(const std::vector<b
 
 
 bool RowStrategy::is_over(const std::vector<bool> *field) noexcept {
-	return Graph.nodes[iState::get_state_by_field(field)]->is_terminate;
+	return Graph.nodes[get_state_by_field(field)]->is_terminate;
 }

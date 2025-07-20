@@ -6,8 +6,8 @@
 
 #include <algorithm>
 
-bool RowMove::check_move(int n, int k, const std::vector<bool> field, std::vector<int> sticks) {
-    if (sticks.size() > k || sticks.size() < 1) {
+bool RowMove::check_move(int n, int a, int b, const std::vector<bool> field, std::vector<int> sticks) {
+    if (sticks.size() > b || sticks.size() < a) {
         return false;
     }
     std::sort(sticks.begin(), sticks.end());

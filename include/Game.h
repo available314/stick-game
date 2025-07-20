@@ -8,27 +8,28 @@
 #include <memory>
 #include "iBotStrategy.h"
 #include "iCheckMove.h"
-#include "iState.h"
+#include "iPlayer.h"
 
-class iState;
+class iPlayer;
 
 class Game : public std::enable_shared_from_this<Game> {
 
-    int _n, _k;
+    int _n, _a, _b;
 
     std::vector<bool> field;
 
     std::shared_ptr<iBotStrategy> strategy;
     std::unique_ptr<iCheckMove> checkMove;
 
-    std::shared_ptr<iState> current_turn;
+    std::shared_ptr<iPlayer> current_turn;
 
 
-    std::pair<std::shared_ptr<iState>, std::shared_ptr<iState>> players;
+    std::pair<std::shared_ptr<iPlayer>, std::shared_ptr<iPlayer>> players;
 
 public:
 
-    Game(int n, int k, std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player);
+    Game(int n, int k, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player);
+    Game(int n, int a, int b, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player);
 
     void Start();
 
@@ -39,7 +40,7 @@ public:
 
     void prepare() const noexcept;
 
-    void setTurn(std::shared_ptr<iState> turn) noexcept;
+    void setTurn(std::shared_ptr<iPlayer> turn) noexcept;
 
     void playTurn() noexcept;
     void nextTurn() noexcept;

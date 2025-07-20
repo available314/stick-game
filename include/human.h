@@ -5,12 +5,12 @@
 #ifndef HUMAN_H
 #define HUMAN_H
 
-#include "iState.h"
+#include "iPlayer.h"
 
 #include <string>
 #include <memory>
 
-class Human : public iState {
+class Human : public iPlayer {
     const std::string name;
 
 public:
