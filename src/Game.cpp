@@ -34,7 +34,6 @@ void Game::print_field() const {
 
 void Game::Start() {
     std::cout << "Game started" << std::endl;
-    print_field();
     setTurn(players.first);
 }
 
@@ -59,6 +58,8 @@ void Game::setTurn(std::shared_ptr<iPlayer> turn) noexcept {
 
 
 void Game::playTurn() noexcept {
+    print_field();
+    std::cout << "Current turn: " << current_turn->getName() << std::endl;
     while (true) {
         auto moves = current_turn->playTurn();
 
@@ -68,9 +69,11 @@ void Game::playTurn() noexcept {
             }
             break;
         }
+        for (int i : moves) {
+            std::cout << i << ' ';
+        }
         std::cout << "Wrong moves!" << std::endl;
     }
-    print_field();
 }
 
 void Game::nextTurn() noexcept {

@@ -23,9 +23,6 @@ void Human::prevMove() noexcept {
 
 
 std::vector<int> Human::playTurn() noexcept {
-    std::cout << "Current turn: " << name << std::endl;
-    std::cout << "Enter moves: " << std::endl;
-
     int n;
     std::cin >> n;
 

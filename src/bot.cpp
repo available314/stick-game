@@ -29,24 +29,7 @@ std::vector<int> Bot::playTurn() {
     std::shared_ptr<Game> cur_game = game.lock();
     auto strategy = cur_game->getStrategy();
 
+    auto win_moves = strategy->do_turn(field);
 
-    auto cur_state = strategy->get_state_by_field(field);
-
-    auto next_win_state_opt = strategy->get_next_win_state(cur_state);
-
-    if (!next_win_state_opt) { // ToDo: better handler
-        for (int i = 0; i < field->size(); i++) {
-            if (field->at(i)) {
-                return std::vector<int>(1, i);
-            }
-        }
-    }
-    auto next_state = next_win_state_opt.value();
-    auto moves = strategy->make_transition(*field, next_state);
-    if (!moves) {
-        throw std::runtime_error("No moves left");
-    }
-
-
-    return moves.value();
+    return win_moves;
 }

@@ -13,9 +13,11 @@ public:
     iBotStrategy() = default;
 
     virtual void build() = 0;
-    virtual std::optional<std::vector<std::pair<int, int>>> get_next_win_state(const std::vector<std::pair<int, int>> &cur_state) noexcept = 0;
 
-    virtual std::optional<std::vector<int>> make_transition(const std::vector<bool> &from, const std::vector<std::pair<int, int>> &to) noexcept = 0;
+    virtual std::optional<std::vector<int>> go_win(const std::vector<bool> *state) noexcept = 0;
+    virtual std::optional<std::vector<int>> rand_walk(const std::vector<bool> *state) noexcept = 0;
+
+    std::vector<int> do_turn(const std::vector<bool> *state);
 
     std::vector<std::pair<int, int>> get_state_by_field(const std::vector<bool> *state) noexcept;
 

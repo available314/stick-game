@@ -225,6 +225,9 @@ void RowStrategy::graph::calculate_data() noexcept {
 			if (!nxt->fall_state && !node->fall_state) {
 				nxt->fall_state = node;
 			}
+			if (!nxt->random_state) {
+				nxt->random_state = node;
+			}
 		}
 	}
 }
@@ -296,4 +299,26 @@ std::optional<std::vector<int>> RowStrategy::make_transition(const std::vector<b
 
 bool RowStrategy::is_over(const std::vector<bool> *field) noexcept {
 	return Graph.nodes[get_state_by_field(field)]->is_terminate;
+}
+
+std::optional<std::vector<int>> RowStrategy::go_win(const std::vector<bool> *field) noexcept {
+	auto cur_state = get_state_by_field(field);
+	auto next_win_state_opt = get_next_win_state(cur_state);
+
+	if (!next_win_state_opt) {
+		return std::nullopt;
+	}
+	const auto& next_state = next_win_state_opt.value();
+	auto moves = make_transition(*field, next_state);
+	return moves.value();
+}
+
+std::optional<std::vector<int>> RowStrategy::rand_walk(const std::vector<bool> *field) noexcept {
+	auto cur_state = get_state_by_field(field);
+	if (!Graph.nodes[cur_state]->random_state) {
+		return std::nullopt;
+	}
+	auto next_state = Graph.nodes[cur_state]->random_state->state;
+	auto moves = make_transition(*field, next_state);
+	return moves.value();
 }

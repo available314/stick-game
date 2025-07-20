@@ -12,7 +12,7 @@ bool RowMove::check_move(int n, int a, int b, const std::vector<bool> field, std
     }
     std::sort(sticks.begin(), sticks.end());
     for (int i : sticks) {
-        if (!field[i]) {
+        if (i >= n || !field[i]) {
             return false;
         }
     }
@@ -20,9 +20,6 @@ bool RowMove::check_move(int n, int a, int b, const std::vector<bool> field, std
         if (sticks[i] != sticks[i - 1] + 1) {
             return false;
         }
-    }
-    if (sticks.back() >= n) {
-        return false;
     }
     return true;
 }
