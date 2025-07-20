@@ -20,7 +20,8 @@ public:
     void prevMove() noexcept override;
 
     std::string getName() const noexcept override;
-    void playTurn() noexcept override;
+
+    std::vector<int> playTurn() noexcept override;
 
     ~Human() override = default;
 };

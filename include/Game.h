@@ -14,7 +14,11 @@ class iState;
 
 class Game : public std::enable_shared_from_this<Game> {
 
-    std::unique_ptr<iBotStrategy> strategy;
+    int _n, _k;
+
+    std::vector<bool> field;
+
+    std::shared_ptr<iBotStrategy> strategy;
     std::unique_ptr<iCheckMove> checkMove;
 
     std::shared_ptr<iState> current_turn;
@@ -24,11 +28,13 @@ class Game : public std::enable_shared_from_this<Game> {
 
 public:
 
-    Game(std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player);
+    Game(int n, int k, std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player);
 
     void Start();
 
-    void setStrategy(std::unique_ptr<iBotStrategy> strategy) noexcept;
+    void print_field() const;
+
+    void setStrategy(std::shared_ptr<iBotStrategy> strategy) noexcept;
     void setMovesChecker(std::unique_ptr<iCheckMove> checkMove) noexcept;
 
     void prepare() const noexcept;
@@ -37,6 +43,10 @@ public:
 
     void playTurn() noexcept;
     void nextTurn() noexcept;
+
+    std::shared_ptr<iBotStrategy> getStrategy() const noexcept;
+
+    bool isEnd() const noexcept;
 
 
     ~Game() = default;

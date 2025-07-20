@@ -6,8 +6,11 @@
 #include "../include/RowStrategy.h"
 
 #include <algorithm>
+#include <iostream>
 #include <numeric>
 #include <thread>
+
+#include "iState.h"
 
 std::vector<std::pair<int, int> > RowStrategy::graph::compress(const std::vector<int> &node_info) noexcept {
     std::vector<std::pair<int, int>> node_info_compressed;
@@ -38,14 +41,14 @@ void RowStrategy::graph::brute_nodes(int n, int k, std::vector<std::vector<std::
 }
 
 void RowStrategy::graph::prepare_nodes() noexcept {
-    nodes[std::vector<std::pair<int, int>>(0)] = std::make_shared<Node>(); // root node
+    nodes[std::vector<std::pair<int, int>>(0)] = std::make_shared<Node>(std::vector<std::pair<int, int>>(0)); // root node
 
     for (int i = 1; i <= n_; i++) {
         std::vector<std::vector<std::pair<int, int>>> result;
         brute_nodes(n_ - i + 1, i, result);
 
-        for (auto pairs : result) {
-            nodes[pairs] = std::make_shared<Node>();
+        for (const auto& pairs : result) {
+            nodes[pairs] = std::make_shared<Node>(pairs);
         }
     }
 }
@@ -95,6 +98,7 @@ void RowStrategy::graph::build_graph() noexcept {
 	                    auto it_node = nodes.find(cur);
 	                    auto prev = it_node->second;
 	                    node->next_nodes.insert(prev);
+						prev->is_terminate = false;
 					}
 				}
 
@@ -121,10 +125,11 @@ void RowStrategy::graph::build_graph() noexcept {
 	                auto it_node = nodes.find(next);
                     auto prev = it_node->second;
                     node->next_nodes.insert(prev);
+					prev->is_terminate = false;
 				}
 
 				if (sum + k + cnt - 2 <= n_ && cnt >= 2) {
-	                int M = node_info_compressed.size();
+	                int M = static_cast<int>(node_info_compressed.size());
 	                for (int i = 0; i < M; ++i) {
 	                    for (int j = i; j < M; ++j) {
 	                        if (i == j && node_info_compressed[i].second < 2)
@@ -167,6 +172,7 @@ void RowStrategy::graph::build_graph() noexcept {
 	                        auto prev = it_node->second;
 		                    node->next_nodes.insert(prev);
 		                    //prev->prev_nodes.insert(node);
+							prev->is_terminate = false;
 	                    }
 	                }
 	            }
@@ -241,4 +247,52 @@ void RowStrategy::build() {
 	Graph.prepare_nodes();
 	Graph.build_graph();
 	Graph.calculate_data();
+}
+
+std::optional<std::vector<std::pair<int, int>>> RowStrategy::get_next_win_state(const std::vector<std::pair<int, int>> &cur_state) noexcept {
+	if (!Graph.nodes.count(cur_state)) {
+		std::cerr << "WTF: ";
+		for (auto [x, y] : cur_state) {
+			std::cerr << x << ", " << y << " | ";
+		}
+		std::cerr << std::endl;
+	}
+	if (Graph.nodes.count(cur_state) && Graph.nodes[cur_state]->fall_state) {
+		return Graph.nodes[cur_state]->fall_state->state;
+	}
+	return std::nullopt;
+}
+
+std::optional<std::vector<int>> RowStrategy::make_transition(const std::vector<bool> &from, const std::vector<std::pair<int, int>> &to) noexcept {
+	// auto cur_state = iState::get_state_by_field(&from);
+
+	int need_to_delete = std::accumulate(from.begin(), from.end(), 0) - std::accumulate(to.begin(), to.end(), 0, [](auto ac, auto data) {
+		return ac + data.first * data.second;
+	});
+
+	if (need_to_delete < 0) {
+		return std::nullopt;
+	}
+
+	std::vector<bool> cur_from = from;
+
+	for (int i = 0; i < cur_from.size(); i++) {
+		if (i >= need_to_delete) {
+			cur_from[i - need_to_delete] = from[i - need_to_delete];
+		}
+		cur_from[i] = false;
+		if (iState::get_state_by_field(&cur_from) == to) {
+			std::vector<int> result(need_to_delete);
+			iota(result.begin(), result.end(), i - need_to_delete + 1);
+			return result;
+		}
+	}
+
+
+	return std::nullopt;
+}
+
+
+bool RowStrategy::is_over(const std::vector<bool> *field) noexcept {
+	return Graph.nodes[iState::get_state_by_field(field)]->is_terminate;
 }

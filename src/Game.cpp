@@ -6,19 +6,37 @@
 
 #include <iostream>
 
-Game::Game(std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player) {
+Game::Game(int n, int k, std::shared_ptr<iState> first_player, std::shared_ptr<iState> second_player) : _n(n), _k(k), field(n, true) {
     players.first = std::move(first_player);
     players.second = std::move(second_player);
     players.first->setNextPlayer(players.second);
     players.second->setNextPlayer(players.first);
+
+    players.first->setField(&field);
+    players.second->setField(&field);
 }
 
+void Game::print_field() const {
+    std::cout << "Current field:" << std::endl;
+    for (auto i : field) {
+        if (i) {
+            std::cout << "|";
+        } else {
+            std::cout << ".";
+        }
+    }
+    std::cout << std::endl;
+}
+
+
 void Game::Start() {
+    std::cout << "Game started" << std::endl;
+    print_field();
     setTurn(players.first);
 }
 
 
-void Game::setStrategy(std::unique_ptr<iBotStrategy> strategy) noexcept {
+void Game::setStrategy(std::shared_ptr<iBotStrategy> strategy) noexcept {
     this->strategy = std::move(strategy);
 }
 
@@ -38,9 +56,29 @@ void Game::setTurn(std::shared_ptr<iState> turn) noexcept {
 
 
 void Game::playTurn() noexcept {
-    current_turn->playTurn();
+    while (true) {
+        auto moves = current_turn->playTurn();
+
+        if (checkMove->check_move(_n, _k, field, moves)) {
+            for (const auto i : moves) {
+                field[i] = false;
+            }
+            break;
+        }
+        std::cout << "Wrong moves!" << std::endl;
+    }
+    print_field();
 }
 
 void Game::nextTurn() noexcept {
     current_turn->nextMove();
+}
+
+
+std::shared_ptr<iBotStrategy> Game::getStrategy() const noexcept {
+    return strategy;
+}
+
+bool Game::isEnd() const noexcept {
+    return strategy->is_over(&field);
 }

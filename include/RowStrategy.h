@@ -23,10 +23,13 @@ class RowStrategy final : public iBotStrategy {
         graph(int _n, int _a, int _b) : n_(_n), a_(_a), b_(_b) {}
 
         struct Node {
+            std::vector<std::pair<int, int>> state;
             std::unordered_set<std::shared_ptr<Node>> next_nodes;
             std::shared_ptr<Node> fall_state;
+            bool is_terminate = true;
 
             Node () = default;
+            explicit Node (const std::vector<std::pair<int, int>> &_state) : state(_state) {}
         };
 
         struct VectorPairHash {
@@ -57,6 +60,9 @@ public:
     explicit RowStrategy(int n, int a, int b);
 
     void build() override;
+    std::optional<std::vector<std::pair<int, int>>> get_next_win_state(const std::vector<std::pair<int, int>> &cur_state) noexcept override;
+    std::optional<std::vector<int>> make_transition(const std::vector<bool> &from, const std::vector<std::pair<int, int>> &to) noexcept override;
+    bool is_over(const std::vector<bool> *field) noexcept override;
 
     ~RowStrategy() override = default;
 };
