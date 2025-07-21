@@ -6,12 +6,14 @@
 
 #include <algorithm>
 
-bool RowMove::check_move(int n, int a, int b, const std::vector<bool> field, std::vector<int> sticks) {
+bool RowMove::check_move(int n, int a, int b, const std::vector<bool> &field, const std::vector<int> &sticks_) {
+    auto sticks = sticks_;
+
     if (sticks.size() > b || sticks.size() < a) {
         return false;
     }
     std::sort(sticks.begin(), sticks.end());
-    for (int i : sticks) {
+    for (int i: sticks) {
         if (i >= n || !field[i]) {
             return false;
         }
@@ -21,5 +23,22 @@ bool RowMove::check_move(int n, int a, int b, const std::vector<bool> field, std
             return false;
         }
     }
+    return true;
+}
+
+bool RowMove::is_over(int n, int a, int b, const std::vector<bool> &field) {
+    int len = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (field[i]) {
+            len++;
+        } else {
+            len = 0;
+        }
+        if (len >= a) {
+            return false;
+        }
+    }
+
     return true;
 }

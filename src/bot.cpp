@@ -6,7 +6,8 @@
 #include "Game.h"
 
 
-Bot::Bot(const std::string &name_) noexcept : name(name_) {}
+Bot::Bot(const std::string &name_) noexcept : name(name_) {
+}
 
 
 std::string Bot::getName() const noexcept {
@@ -20,14 +21,13 @@ void Bot::nextMove() noexcept {
 
 
 void Bot::prevMove() noexcept {
-
 }
 
 
-
 std::vector<int> Bot::playTurn() {
-    std::shared_ptr<Game> cur_game = game.lock();
-    auto strategy = cur_game->getStrategy();
+    if (!strategy) {
+        throw std::runtime_error("Not a valid strategy for bot");
+    }
 
     auto win_moves = strategy->do_turn(field);
 

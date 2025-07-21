@@ -11,7 +11,9 @@ class iCheckMove {
 public:
     iCheckMove() = default;
 
-    virtual bool check_move(int n, int a, int b, const std::vector<bool> field, const std::vector<int> sticks) = 0;
+    virtual bool check_move(int n, int a, int b, const std::vector<bool> &field, const std::vector<int> &sticks) = 0;
+
+    virtual bool is_over(int n, int a, int b, const std::vector<bool> &field) = 0;
 
     virtual ~iCheckMove() = default;
 };

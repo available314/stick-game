@@ -21,6 +21,11 @@ Game::Game(int n, int a, int b, std::shared_ptr<iPlayer> first_player,
     players.second->setField(&field);
 }
 
+void Game::prepare_players() noexcept {
+    players.first->setGame(shared_from_this());
+    players.second->setGame(shared_from_this());
+}
+
 void Game::print_field() const {
     std::cout << "Current field:" << std::endl;
     for (auto i: field) {
@@ -35,27 +40,27 @@ void Game::print_field() const {
 
 
 void Game::Start() {
+    prepare_players();
     std::cout << "Game started" << std::endl;
     setTurn(players.first);
+    std::cout << " exit" << std::endl;
 }
 
 
-void Game::setStrategy(std::shared_ptr<iBotStrategy> strategy) noexcept {
-    this->strategy = std::move(strategy);
+void Game::setStrategyForFirstPlayer(std::unique_ptr<iBotStrategy> strategy) const noexcept {
+    players.first->setStrategy(std::move(strategy));
+}
+
+void Game::setStrategyForSecondPlayer(std::unique_ptr<iBotStrategy> strategy) const noexcept {
+    players.second->setStrategy(std::move(strategy));
 }
 
 void Game::setMovesChecker(std::unique_ptr<iCheckMove> checkMove) noexcept {
     this->checkMove = std::move(checkMove);
 }
 
-
-void Game::prepare() const noexcept {
-    strategy->build();
-}
-
 void Game::setTurn(std::shared_ptr<iPlayer> turn) noexcept {
     current_turn = turn;
-    current_turn->setGame(shared_from_this());
 }
 
 
@@ -82,13 +87,8 @@ void Game::nextTurn() noexcept {
     current_turn->nextMove();
 }
 
-
-std::shared_ptr<iBotStrategy> Game::getStrategy() const noexcept {
-    return strategy;
-}
-
 bool Game::isEnd() const noexcept {
-    return strategy->is_over(&field);
+    return checkMove->is_over(_n, _a, _b, field);
 }
 
 std::string Game::loser() const noexcept {

@@ -10,7 +10,9 @@ class StandardMove : public iCheckMove {
 public:
     StandardMove() = default;
 
-    bool check_move(int n, int a, int b, const std::vector<bool> field, const std::vector<int> sticks) override;
+    bool check_move(int n, int a, int b, const std::vector<bool> &field, const std::vector<int> &sticks) override;
+
+    bool is_over(int n, int a, int b, const std::vector<bool> &field) override;
 
     ~StandardMove() override = default;
 };

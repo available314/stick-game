@@ -18,11 +18,11 @@ int main() {
 
     //auto start = std::chrono::steady_clock::now();
 
-    auto solve = std::make_shared<Game>(n, k, std::make_shared<Bot>(std::string{"egor"}),
+    auto solve = std::make_shared<Game>(n, k, std::make_shared<Human>(std::string{"egor"}),
                                         std::make_shared<Bot>(std::string{"grundy_bot"}));
-    solve->setStrategy(std::make_shared<RowGrundyStrategy>(n, k));
+
+    solve->setStrategyForSecondPlayer(std::make_unique<RowGrundyStrategy>(n, k));
     solve->setMovesChecker(std::make_unique<RowMove>());
-    solve->prepare();
 
     //auto end = std::chrono::steady_clock::now();
     //std::chrono::duration<double> elapsed_seconds = end - start;
