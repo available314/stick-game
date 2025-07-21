@@ -9,17 +9,17 @@
 
 class iBotStrategy {
 public:
-
-    iBotStrategy() = default;
+    iBotStrategy() noexcept = default;
 
     virtual void build() = 0;
 
-    virtual std::optional<std::vector<int>> go_win(const std::vector<bool> *state) noexcept = 0;
-    virtual std::optional<std::vector<int>> rand_walk(const std::vector<bool> *state) noexcept = 0;
+    virtual std::optional<std::vector<int> > go_win(const std::vector<bool> *state) noexcept = 0;
+
+    virtual std::optional<std::vector<int> > rand_walk(const std::vector<bool> *state) noexcept = 0;
 
     std::vector<int> do_turn(const std::vector<bool> *state);
 
-    std::vector<std::pair<int, int>> get_state_by_field(const std::vector<bool> *state) noexcept;
+    std::vector<std::pair<int, int> > get_state_by_field(const std::vector<bool> *state) noexcept;
 
     virtual bool is_over(const std::vector<bool> *field) noexcept = 0;
 

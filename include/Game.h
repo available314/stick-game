@@ -13,7 +13,6 @@
 class iPlayer;
 
 class Game : public std::enable_shared_from_this<Game> {
-
     int _n, _a, _b;
 
     std::vector<bool> field;
@@ -24,11 +23,11 @@ class Game : public std::enable_shared_from_this<Game> {
     std::shared_ptr<iPlayer> current_turn;
 
 
-    std::pair<std::shared_ptr<iPlayer>, std::shared_ptr<iPlayer>> players;
+    std::pair<std::shared_ptr<iPlayer>, std::shared_ptr<iPlayer> > players;
 
 public:
-
     Game(int n, int k, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player);
+
     Game(int n, int a, int b, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player);
 
     void Start();
@@ -36,6 +35,7 @@ public:
     void print_field() const;
 
     void setStrategy(std::shared_ptr<iBotStrategy> strategy) noexcept;
+
     void setMovesChecker(std::unique_ptr<iCheckMove> checkMove) noexcept;
 
     void prepare() const noexcept;
@@ -43,15 +43,17 @@ public:
     void setTurn(std::shared_ptr<iPlayer> turn) noexcept;
 
     void playTurn() noexcept;
+
     void nextTurn() noexcept;
 
     std::shared_ptr<iBotStrategy> getStrategy() const noexcept;
 
     bool isEnd() const noexcept;
 
+    std::string loser() const noexcept;
+
 
     ~Game() = default;
-
 };
 
 #endif //SOLVE_H

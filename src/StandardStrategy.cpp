@@ -7,7 +7,7 @@
 #include "StandardStrategy.h"
 
 StandardStrategy::StandardStrategy(int n, int a, int b) : _n(n), _a(a), _b(b) {
-    failure_state.assign(_n, -1);
+    failure_state.assign(_n + 1, -1);
 }
 
 StandardStrategy::StandardStrategy(int n, int k) : StandardStrategy(n, 1, k) {
