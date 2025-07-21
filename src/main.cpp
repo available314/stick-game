@@ -12,16 +12,17 @@
 #include "StandardStrategy.h"
 
 int main() {
-    int n, k;
-    std::cin >> n >> k;
+    int n, a, b;
+    std::cin >> n >> a >> b;
 
 
     //auto start = std::chrono::steady_clock::now();
 
-    auto solve = std::make_shared<Game>(n, k, std::make_shared<Human>(std::string{"egor"}),
-                                        std::make_shared<Bot>(std::string{"grundy_bot"}));
+    auto solve = std::make_shared<Game>(n, a, b, std::make_shared<Bot>(std::string{"grundy_bot"}),
+                                        std::make_shared<Bot>(std::string{"graph_bot"}));
 
-    solve->setStrategyForSecondPlayer(std::make_unique<RowGrundyStrategy>(n, k));
+    solve->setStrategyForFirstPlayer(std::make_unique<RowGrundyStrategy>(n, a, b));
+    solve->setStrategyForSecondPlayer(std::make_unique<RowGraphStrategy>(n, a, b));
     solve->setMovesChecker(std::make_unique<RowMove>());
 
     //auto end = std::chrono::steady_clock::now();
@@ -35,6 +36,7 @@ int main() {
         solve->nextTurn();
     }
 
+    solve->print_field();
     std::cout << "loser: " << solve->loser();
 
     return 0;
