@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+#include "bot.h"
+#include "human.h"
+
 Game::Game(int n, int k, std::shared_ptr<iPlayer> first_player, std::shared_ptr<iPlayer> second_player) : Game(
     n, 1, k, first_player, second_player) {
 }
@@ -41,9 +44,7 @@ void Game::print_field() const {
 
 void Game::Start() {
     prepare_players();
-    std::cout << "Game started" << std::endl;
     setTurn(players.first);
-    std::cout << " exit" << std::endl;
 }
 
 
@@ -63,24 +64,16 @@ void Game::setTurn(std::shared_ptr<iPlayer> turn) noexcept {
     current_turn = turn;
 }
 
+bool Game::playTurn() noexcept {
+    auto moves = current_turn->playTurn();
 
-void Game::playTurn() noexcept {
-    print_field();
-    std::cout << "Current turn: " << current_turn->getName() << std::endl;
-    while (true) {
-        auto moves = current_turn->playTurn();
-
-        if (checkMove->check_move(_n, _a, _b, field, moves)) {
-            for (const auto i: moves) {
-                field[i] = false;
-            }
-            break;
+    if (checkMove->check_move(_n, _a, _b, field, moves)) {
+        for (const auto i: moves) {
+            field[i] = false;
         }
-        for (int i: moves) {
-            std::cout << i << ' ';
-        }
-        std::cout << "Wrong moves!" << std::endl;
+        return true;
     }
+    return false;
 }
 
 void Game::nextTurn() noexcept {
@@ -96,4 +89,29 @@ std::string Game::loser() const noexcept {
         return "in process";
     }
     return current_turn->getName();
+}
+
+std::string Game::getCurrentPlayerName() const noexcept {
+    return current_turn->getName();
+}
+
+const std::vector<bool> &Game::getField() const noexcept {
+    return field;
+}
+
+bool Game::isCurrentPlayerBot() const noexcept {
+    return dynamic_cast<Bot *>(current_turn.get()) != nullptr;
+}
+
+bool Game::isCurrentPlayerHuman() const noexcept {
+    return dynamic_cast<Human *>(current_turn.get()) != nullptr;
+}
+
+bool Game::setHumanTurn(const std::vector<int> &moves) {
+    auto human = dynamic_cast<Human *>(current_turn.get());
+    if (!human) {
+        throw std::invalid_argument("Human turn is not currently available");
+    }
+    human->setTurn(moves);
+    return playTurn();
 }

@@ -11,6 +11,9 @@
 #include "StandardMove.h"
 #include "StandardStrategy.h"
 
+#include <SFML/Graphics.hpp>
+
+
 int main() {
     int n, a, b;
     std::cin >> n >> a >> b;

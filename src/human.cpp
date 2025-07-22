@@ -18,18 +18,13 @@ void Human::nextMove() noexcept {
 }
 
 void Human::prevMove() noexcept {
+}
 
+void Human::setTurn(const std::vector<int> &moves_) {
+    moves = moves_;
 }
 
 
 std::vector<int> Human::playTurn() noexcept {
-    int n;
-    std::cin >> n;
-
-    std::vector<int> moves(n);
-    for (int i = 0; i < n; i++) {
-        std::cin >> moves[i];
-    }
-
     return moves;
 }

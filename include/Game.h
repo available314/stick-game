@@ -43,13 +43,23 @@ public:
 
     void setTurn(std::shared_ptr<iPlayer> turn) noexcept;
 
-    void playTurn() noexcept;
+    bool playTurn() noexcept;
+
+    std::string getCurrentPlayerName() const noexcept;
 
     void nextTurn() noexcept;
 
     bool isEnd() const noexcept;
 
     std::string loser() const noexcept;
+
+    const std::vector<bool> &getField() const noexcept;
+
+    bool isCurrentPlayerBot() const noexcept;
+
+    bool isCurrentPlayerHuman() const noexcept;
+
+    bool setHumanTurn(const std::vector<int> &moves);
 
 
     ~Game() = default;

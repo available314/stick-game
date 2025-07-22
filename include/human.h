@@ -12,14 +12,19 @@
 
 class Human : public iPlayer {
     const std::string name;
+    std::vector<int> moves;
 
 public:
-    explicit Human(const std::string &_name) : name(_name) {}
+    explicit Human(const std::string &_name) : name(_name) {
+    }
 
     void nextMove() noexcept override;
+
     void prevMove() noexcept override;
 
     std::string getName() const noexcept override;
+
+    void setTurn(const std::vector<int> &moves);
 
     std::vector<int> playTurn() noexcept override;
 
