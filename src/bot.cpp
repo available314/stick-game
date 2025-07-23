@@ -5,6 +5,8 @@
 #include "bot.h"
 #include "Game.h"
 
+#include <stdexcept>
+
 
 Bot::Bot(const std::string &name_) noexcept : name(name_) {
 }
@@ -20,7 +22,8 @@ void Bot::nextMove() noexcept {
 }
 
 
-void Bot::prevMove() noexcept {
+std::optional<std::vector<bool> > Bot::prevMove() noexcept {
+    return std::nullopt;
 }
 
 

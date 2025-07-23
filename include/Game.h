@@ -49,6 +49,8 @@ public:
 
     void nextTurn() noexcept;
 
+    bool undoStep() noexcept;
+
     bool isEnd() const noexcept;
 
     std::string loser() const noexcept;

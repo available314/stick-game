@@ -68,6 +68,9 @@ bool Game::playTurn() noexcept {
     auto moves = current_turn->playTurn();
 
     if (checkMove->check_move(_n, _a, _b, field, moves)) {
+        if (isCurrentPlayerHuman()) {
+            static_cast<Human *>(current_turn.get())->save_field(field);
+        }
         for (const auto i: moves) {
             field[i] = false;
         }
@@ -79,6 +82,18 @@ bool Game::playTurn() noexcept {
 void Game::nextTurn() noexcept {
     current_turn->nextMove();
 }
+
+bool Game::undoStep() noexcept {
+    if (dynamic_cast<Human *>(current_turn.get()) == nullptr) {
+        return false;
+    }
+    if (auto res = current_turn->prevMove()) {
+        field = res.value();
+        return true;
+    }
+    return false;
+}
+
 
 bool Game::isEnd() const noexcept {
     return checkMove->is_over(_n, _a, _b, field);

@@ -18,7 +18,7 @@ public:
 
     void nextMove() noexcept override;
 
-    void prevMove() noexcept override;
+    std::optional<std::vector<bool> > prevMove() noexcept override;
 
     std::vector<int> playTurn() override;
 

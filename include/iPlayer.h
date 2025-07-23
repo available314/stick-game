@@ -43,7 +43,7 @@ public:
 
     virtual void nextMove() = 0;
 
-    virtual void prevMove() = 0;
+    virtual std::optional<std::vector<bool> > prevMove() = 0;
 
     virtual std::vector<int> playTurn() = 0;
 

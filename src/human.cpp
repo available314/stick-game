@@ -17,11 +17,21 @@ void Human::nextMove() noexcept {
     cur_game->setTurn(nextPlayer.lock());
 }
 
-void Human::prevMove() noexcept {
+std::optional<std::vector<bool> > Human::prevMove() noexcept {
+    if (!backup_fields.empty()) {
+        auto res = backup_fields.top();
+        backup_fields.pop();
+        return res;
+    }
+    return std::nullopt;
 }
 
 void Human::setTurn(const std::vector<int> &moves_) {
     moves = moves_;
+}
+
+void Human::save_field(const std::vector<bool> &field) {
+    backup_fields.push(field);
 }
 
 
