@@ -8,7 +8,8 @@
 #include <algorithm>
 #include <numeric>
 
-bool NormalModeMove::check_move(int n, int a, int b, const std::vector<bool> &field, const std::vector<int> &sticks) {
+bool NormalModeMove::check_move(int n, int a, int b, const std::vector<bool> &field, const std::vector<int> &sticks_) {
+    std::vector<int> sticks = sticks_;
     if (sticks.size() > 3 || sticks.size() < 1) {
         return false;
     }
@@ -28,7 +29,7 @@ bool NormalModeMove::check_move(int n, int a, int b, const std::vector<bool> &fi
 }
 
 bool NormalModeMove::is_over(int n, int a, int b, const std::vector<bool> &field) {
-    int sum = std::std::accumulate(field.begin(), field.end(), 0);
+    int sum = std::accumulate(field.begin(), field.end(), 0);
     if (sum < 1) {
         return true;
     }
