@@ -10,11 +10,4 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         src/*.cpp
 )
 
-add_subdirectory(libs/SFML)
-
 add_executable(yandex_group ${SOURCES})
-target_link_libraries(yandex_group
-        sfml-graphics
-        sfml-window
-        sfml-system
-)
