@@ -13,12 +13,14 @@ class StandardStrategy final : public iBotStrategy {
 
 public:
     explicit StandardStrategy(int n, int k);
+
     explicit StandardStrategy(int n, int a, int b);
 
     void build() noexcept override;
-    bool is_over(const std::vector<bool> *field) noexcept override;
-    std::optional<std::vector<int>> go_win(const std::vector<bool> *state) noexcept override;
-    std::optional<std::vector<int>> rand_walk(const std::vector<bool> *state) noexcept override;
+
+    std::optional<std::vector<int> > go_win(const std::vector<bool> *state) noexcept override;
+
+    std::optional<std::vector<int> > rand_walk(const std::vector<bool> *state) noexcept override;
 
     ~StandardStrategy() override = default;
 };

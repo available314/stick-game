@@ -5,18 +5,20 @@
 #ifndef NORMALMODESTRATEGY_H
 #define NORMALMODESTRATEGY_H
 #include <unordered_map>
+#include <unordered_set>
 
 #include "iBotStrategy.h"
 
 class NormalModeStrategy : public iBotStrategy {
+    static constexpr int NUM_THREADS = 12;
+
     struct graph {
         int n_;
 
         struct Node {
-            int random_state = -1;
             int fall_state = -1;
             std::vector<std::pair<int, int> > state;
-            std::vector<int> next_state;
+            std::unordered_set<int> next_states;
 
             Node() = default;
 
@@ -51,20 +53,33 @@ class NormalModeStrategy : public iBotStrategy {
 
         void build_graph() noexcept;
 
+        std::vector<std::vector<std::pair<int, int> > > add_k_sequence(
+            const std::vector<std::pair<int, int> > &cur_state,
+            int k) noexcept;
+
         void dfs(int v, std::vector<int> &topsort,
-                 std::vector<int> &used) noexcept;
+                 std::vector<bool> &used) noexcept;
 
         void calculate_data() noexcept;
 
-        bool is_win(int n) noexcept;
+        bool try_to_read_from_file() noexcept;
     };
+
+    graph Graph;
+    int n_;
+
+
+    std::optional<std::vector<std::pair<int, int> > > get_next_win_state(
+        const std::vector<std::pair<int, int> > &cur_state) noexcept;
+
+    std::optional<std::vector<int> > make_transition(const std::vector<bool> &from,
+                                                     const std::vector<std::pair<int, int> > &to)
+        noexcept;
 
 public:
     explicit NormalModeStrategy(int n);
 
     void build() override;
-
-    bool is_over(const std::vector<bool> *field) noexcept override;
 
     std::optional<std::vector<int> > go_win(const std::vector<bool> *state) noexcept override;
 

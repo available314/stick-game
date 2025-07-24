@@ -25,8 +25,6 @@ public:
 
     std::optional<std::vector<int> > rand_walk(const std::vector<bool> *state) noexcept override;
 
-    bool is_over(const std::vector<bool> *field) noexcept override;
-
     ~RowGrundyStrategy() override = default;
 };
 

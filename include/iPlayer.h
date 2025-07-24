@@ -33,8 +33,6 @@ public:
 
     void setNextPlayer(const std::shared_ptr<iPlayer> &nextPlayer) noexcept;
 
-    bool has_moves(const std::vector<bool> *field) const noexcept;
-
     bool hasGame() const noexcept;
 
     virtual std::string getName() const = 0;

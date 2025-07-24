@@ -302,11 +302,6 @@ std::optional<std::vector<int> > RowGraphStrategy::make_transition(const std::ve
 	return std::nullopt;
 }
 
-
-bool RowGraphStrategy::is_over(const std::vector<bool> *field) noexcept {
-	return Graph.nodes[get_state_by_field(field)]->is_terminate;
-}
-
 std::optional<std::vector<int> > RowGraphStrategy::go_win(const std::vector<bool> *field) noexcept {
 	auto cur_state = get_state_by_field(field);
 	auto next_win_state_opt = get_next_win_state(cur_state);

@@ -108,11 +108,4 @@ std::optional<std::vector<int> > RowGrundyStrategy::rand_walk(const std::vector<
     return std::nullopt;
 }
 
-bool RowGrundyStrategy::is_over(const std::vector<bool> *field) noexcept {
-    if (!rand_walk(field)) {
-        return true;
-    }
-    return false;
-}
-
 

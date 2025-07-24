@@ -21,8 +21,6 @@ public:
 
     std::vector<std::pair<int, int> > get_state_by_field(const std::vector<bool> *state) noexcept;
 
-    virtual bool is_over(const std::vector<bool> *field) noexcept = 0;
-
     virtual ~iBotStrategy() = default;
 };
 

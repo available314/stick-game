@@ -11,7 +11,6 @@ StandardStrategy::StandardStrategy(int n, int a, int b) : _n(n), _a(a), _b(b) {
 }
 
 StandardStrategy::StandardStrategy(int n, int k) : StandardStrategy(n, 1, k) {
-
 }
 
 void StandardStrategy::build() noexcept {
@@ -26,12 +25,7 @@ void StandardStrategy::build() noexcept {
     }
 }
 
-bool StandardStrategy::is_over(const std::vector<bool> *field) noexcept {
-    auto sum = std::accumulate(field->begin(), field->end(), 0);
-    return sum < _a;
-}
-
-std::optional<std::vector<int>> StandardStrategy::go_win(const std::vector<bool> *state) noexcept {
+std::optional<std::vector<int> > StandardStrategy::go_win(const std::vector<bool> *state) noexcept {
     auto sum = std::accumulate(state->begin(), state->end(), 0);
 
     if (failure_state[sum] == -1) {
@@ -49,7 +43,7 @@ std::optional<std::vector<int>> StandardStrategy::go_win(const std::vector<bool>
     return result;
 }
 
-std::optional<std::vector<int>> StandardStrategy::rand_walk(const std::vector<bool> *state) noexcept {
+std::optional<std::vector<int> > StandardStrategy::rand_walk(const std::vector<bool> *state) noexcept {
     std::vector<int> result;
     result.reserve(_a);
 
