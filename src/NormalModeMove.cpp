@@ -20,7 +20,7 @@ bool NormalModeMove::check_move(int n, int a, int b, const std::vector<bool> &fi
     }
     if (sticks.size() == 3) {
         std::sort(sticks.begin(), sticks.end());
-        if (sticks[0] + 1 != sticks[1] || sticks[1] != sticks[2]) {
+        if (sticks[0] + 1 != sticks[1] || sticks[1] + 1 != sticks[2]) {
             return false;
         }
     }
