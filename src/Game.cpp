@@ -125,7 +125,7 @@ bool Game::isCurrentPlayerHuman() const noexcept {
 bool Game::setHumanTurn(const std::vector<int> &moves) {
     auto human = dynamic_cast<Human *>(current_turn.get());
     if (!human) {
-        throw std::invalid_argument("Human turn is not currently available");
+        throw std::runtime_error("Human turn is not currently available");
     }
     human->setTurn(moves);
     return playTurn();
