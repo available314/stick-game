@@ -63,6 +63,7 @@ public:
 
     bool setHumanTurn(const std::vector<int> &moves);
 
+    std::string game_rule() const;
 
     ~Game() = default;
 };

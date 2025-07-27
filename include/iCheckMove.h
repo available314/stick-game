@@ -5,6 +5,7 @@
 #ifndef ICHECKMOVE_H
 #define ICHECKMOVE_H
 
+#include <string>
 #include <vector>
 
 class iCheckMove {
@@ -15,7 +16,9 @@ public:
 
     virtual bool is_over(int n, int a, int b, const std::vector<bool> &field) = 0;
 
-    virtual ~iCheckMove() = default;
+    virtual std::string game_rules(int a, int b) = 0;
+
+    ~iCheckMove() = default;
 };
 
 #endif //ICHECKMOVE_H

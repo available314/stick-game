@@ -15,7 +15,9 @@ public:
 
     bool is_over(int n, int a, int b, const std::vector<bool> &field) override;
 
-    ~RowMove() override = default;
+    std::string game_rules(int a, int b) override;
+
+    ~RowMove() = default;
 };
 
 #endif //ROWMOVE_H

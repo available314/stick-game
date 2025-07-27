@@ -35,3 +35,7 @@ bool NormalModeMove::is_over(int n, int a, int b, const std::vector<bool> &field
     }
     return false;
 }
+
+std::string NormalModeMove::game_rules(int a, int b) {
+    return R"(You can take 1 or 2 sticks anywhere or 3 in row)";
+}

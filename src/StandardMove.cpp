@@ -25,3 +25,7 @@ bool StandardMove::is_over(int n, int a, int b, const std::vector<bool> &field) 
     }
     return false;
 }
+
+std::string StandardMove::game_rules(int a, int b) {
+    return "You can take from " + std::to_string(a) + " to " + std::to_string(b) + " sticks anywhere";
+}

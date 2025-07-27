@@ -14,7 +14,9 @@ public:
 
     bool is_over(int n, int a, int b, const std::vector<bool> &field) override;
 
-    ~StandardMove() override = default;
+    std::string game_rules(int a, int b) override;
+
+    ~StandardMove() = default;
 };
 
 #endif //STANDARDMOVE_H

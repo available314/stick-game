@@ -130,3 +130,7 @@ bool Game::setHumanTurn(const std::vector<int> &moves) {
     human->setTurn(moves);
     return playTurn();
 }
+
+std::string Game::game_rule() const {
+    return checkMove->game_rules(_a, _b);
+}
